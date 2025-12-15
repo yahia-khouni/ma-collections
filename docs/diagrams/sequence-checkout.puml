@@ -1,0 +1,58 @@
+@startuml Sequence_Checkout
+' M&A Collections - Checkout Sequence Diagram
+
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+
+skinparam sequence {
+    ArrowColor #111827
+    ActorBorderColor #B8960C
+    ActorBackgroundColor #D4AF37
+    ParticipantBorderColor #111827
+    ParticipantBackgroundColor #F9FAFB
+}
+
+title Séquence - Processus de Commande
+
+actor Client
+participant "CheckoutPage" as CP
+participant "MedusaAPI" as API
+participant "PaymentGateway" as PG
+participant "EmailService" as ES
+
+Client -> CP: Enter shipping address
+CP -> API: PUT /store/carts/{id}
+API --> CP: Cart updated
+
+Client -> CP: Select shipping method
+CP -> API: POST /store/carts/{id}/shipping-methods
+API --> CP: Shipping added
+
+Client -> CP: Enter payment info
+CP -> API: POST /store/carts/{id}/payment-sessions
+API --> CP: Payment session created
+
+Client -> CP: Click "Place Order"
+activate CP
+
+CP -> API: POST /store/carts/{id}/complete
+activate API
+
+API -> PG: Process payment
+activate PG
+PG --> API: Payment successful
+deactivate PG
+
+API -> API: Create Order
+API -> ES: Send confirmation email
+activate ES
+ES --> API: Email sent
+deactivate ES
+
+API --> CP: Order completed
+deactivate API
+
+CP --> Client: Show order confirmation
+deactivate CP
+
+@enduml

@@ -1,0 +1,80 @@
+@startuml Class_Cart
+' M&A Collections - Cart Module Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #FEFEFE
+
+skinparam class {
+    BackgroundColor #F9FAFB
+    BorderColor #111827
+}
+
+title Module Panier - Diagramme de Classes
+
+class CartService {
+    + createCart(regionId): Cart
+    + getCart(cartId): Cart
+    + addLineItem(cartId, variantId, qty): Cart
+    + updateLineItem(cartId, itemId, qty): Cart
+    + removeLineItem(cartId, itemId): Cart
+    + applyDiscount(cartId, code): Cart
+    + calculateTotals(cart): Cart
+}
+
+class Cart {
+    - id: string
+    - region_id: string
+    - customer_id: string
+    - email: string
+    - billing_address_id: string
+    - shipping_address_id: string
+    - items: LineItem[]
+    - discounts: Discount[]
+    - subtotal: int
+    - discount_total: int
+    - shipping_total: int
+    - tax_total: int
+    - total: int
+}
+
+class LineItem {
+    - id: string
+    - cart_id: string
+    - order_id: string
+    - variant_id: string
+    - title: string
+    - description: string
+    - thumbnail: string
+    - quantity: int
+    - unit_price: int
+    - subtotal: int
+    - total: int
+}
+
+class Discount {
+    - id: string
+    - code: string
+    - is_dynamic: boolean
+    - rule: DiscountRule
+    - starts_at: datetime
+    - ends_at: datetime
+}
+
+class DiscountRule {
+    - id: string
+    - type: DiscountType
+    - value: int
+    - allocation: string
+}
+
+enum DiscountType {
+    FIXED
+    PERCENTAGE
+    FREE_SHIPPING
+}
+
+CartService --> Cart : manages >
+Cart "1" *-- "*" LineItem : contains
+Cart "*" -- "*" Discount : applies
+
+@enduml

@@ -1,0 +1,59 @@
+@startuml Sequence_AddToCart
+' M&A Collections - Add to Cart Sequence Diagram
+
+skinparam backgroundColor #FEFEFE
+skinparam sequenceMessageAlign center
+
+skinparam sequence {
+    ArrowColor #111827
+    ActorBorderColor #B8960C
+    ActorBackgroundColor #D4AF37
+    ParticipantBorderColor #111827
+    ParticipantBackgroundColor #F9FAFB
+}
+
+title Séquence - Ajout au Panier
+
+actor Client
+participant "ProductPage" as PP
+participant "CartService" as CS
+participant "MedusaAPI" as API
+participant "Database" as DB
+
+Client -> PP: Click "Add to Cart"
+activate PP
+
+PP -> CS: addToCart(variantId, quantity)
+activate CS
+
+CS -> API: POST /store/carts/{id}/line-items
+activate API
+
+API -> DB: Check variant stock
+activate DB
+DB --> API: Stock available
+deactivate DB
+
+API -> DB: Insert line item
+activate DB
+DB --> API: Item created
+deactivate DB
+
+API -> DB: Calculate totals
+activate DB
+DB --> API: Updated cart
+deactivate DB
+
+API --> CS: Cart with new item
+deactivate API
+
+CS --> PP: Updated cart state
+deactivate CS
+
+PP -> PP: Show success notification
+PP -> PP: Update cart badge count
+
+PP --> Client: Display updated UI
+deactivate PP
+
+@enduml

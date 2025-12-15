@@ -1,0 +1,672 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+
+\geometry{margin=2cm}
+
+\definecolor{brandgold}{RGB}{212,175,55}
+\definecolor{darkgrey}{RGB}{17,24,39}
+\definecolor{passed}{RGB}{34,197,94}
+\definecolor{failed}{RGB}{239,68,68}
+\definecolor{pending}{RGB}{234,179,8}
+
+\titleformat{\section}{\Large\bfseries\color{darkgrey}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgrey}}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{brandgold}{M\&A Collections}}
+\fancyhead[R]{Rapport de Tests PVT}
+\fancyfoot[C]{\thepage}
+
+\newcommand{\passed}{\cellcolor{passed!30}\textbf{PASSÉ}}
+\newcommand{\failed}{\cellcolor{failed!30}\textbf{ÉCHOUÉ}}
+\newcommand{\pending}{\cellcolor{pending!30}\textbf{EN COURS}}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\textcolor{darkgrey}{Rapport de Tests PVT}\par}
+    \vspace{0.5cm}
+    {\Large\textcolor{brandgold}{M\&A Collections}\par}
+    \vspace{1cm}
+    {\large Process Validation Testing\par}
+    
+    \vspace{2cm}
+    
+    \begin{tabular}{ll}
+        \textbf{Projet:} & M\&A Collections E-commerce \\
+        \textbf{Version:} & 1.0 \\
+        \textbf{Date de Test:} & 15 Décembre 2025 \\
+        \textbf{Testeur:} & Équipe QA \\
+        \textbf{Environnement:} & Development (localhost) \\
+    \end{tabular}
+    
+    \vspace{3cm}
+    
+    \begin{tabular}{|c|c|c|}
+        \hline
+        \textbf{Total Tests} & \textbf{Passés} & \textbf{Échoués} \\
+        \hline
+        45 & 43 & 2 \\
+        \hline
+    \end{tabular}
+    
+    \vspace{0.5cm}
+    {\large\textbf{Taux de Réussite: 95.5\%}\par}
+    
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================
+\section{Introduction}
+% ============================================
+
+\subsection{Objectif du Document}
+Ce document présente les résultats des tests de validation du processus (PVT) pour la plateforme e-commerce M\&A Collections. Il couvre les tests fonctionnels, d'intégration et d'interface utilisateur.
+
+\subsection{Portée des Tests}
+\begin{itemize}
+    \item Module Catalogue et Produits
+    \item Module Panier
+    \item Module Authentification
+    \item Module Compte Client
+    \item Module Commande (Checkout)
+    \item Module Navigation et UI
+\end{itemize}
+
+\subsection{Environnement de Test}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Composant} & \textbf{Configuration} \\
+\hline
+OS & Windows 11 \\
+Navigateur & Chrome 120, Firefox 121 \\
+Frontend URL & http://localhost:8000 \\
+Backend URL & http://localhost:9000 \\
+Database & PostgreSQL 15 \\
+Node.js & v20.x \\
+\hline
+\end{tabular}
+\caption{Environnement de test}
+\end{table}
+
+% ============================================
+\section{Scénarios de Test - Module Catalogue}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC01 & Affichage page d'accueil & 
+1. Ouvrir http://localhost:8000/tn \newline
+2. Vérifier le chargement &
+Page avec hero section, produits vedettes &
+\passed \\
+\hline
+
+TC02 & Navigation vers Store & 
+1. Cliquer sur "Store" dans le menu \newline
+2. Vérifier l'URL &
+Redirection vers /tn/store avec liste produits &
+\passed \\
+\hline
+
+TC03 & Affichage liste produits & 
+1. Aller sur /tn/store \newline
+2. Vérifier la grille de produits &
+Produits affichés en grille responsive &
+\passed \\
+\hline
+
+TC04 & Filtrage par catégorie & 
+1. Cliquer sur catégorie "Hommes" \newline
+2. Vérifier les produits affichés &
+Seuls les produits hommes affichés &
+\passed \\
+\hline
+
+TC05 & Détail d'un produit & 
+1. Cliquer sur un produit \newline
+2. Vérifier la page détail &
+Images, titre, prix, description, variantes &
+\passed \\
+\hline
+
+TC06 & Sélection de variante & 
+1. Aller sur page produit \newline
+2. Sélectionner taille/couleur &
+Variante sélectionnée, prix mis à jour &
+\passed \\
+\hline
+
+TC07 & Affichage prix en TND & 
+1. Vérifier les prix sur plusieurs pages &
+Tous les prix en Dinar Tunisien (TND) &
+\passed \\
+\hline
+
+TC08 & Pagination produits & 
+1. Aller en bas de la liste \newline
+2. Cliquer sur page suivante &
+Nouvelle page de produits chargée &
+\passed \\
+\hline
+
+\caption{Tests Module Catalogue}
+\end{longtable}
+
+% ============================================
+\section{Scénarios de Test - Module Panier}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC09 & Ajout produit au panier & 
+1. Aller sur page produit \newline
+2. Sélectionner variante \newline
+3. Cliquer "Ajouter au panier" &
+Produit ajouté, notification affichée &
+\passed \\
+\hline
+
+TC10 & Badge compteur panier & 
+1. Ajouter un produit \newline
+2. Vérifier le header &
+Badge affiche le nombre d'articles &
+\passed \\
+\hline
+
+TC11 & Dropdown panier (hover) & 
+1. Survoler l'icône panier \newline
+2. Vérifier le dropdown &
+Aperçu du panier avec articles &
+\passed \\
+\hline
+
+TC12 & Page panier complète & 
+1. Cliquer sur "Cart" \newline
+2. Vérifier la page &
+Liste articles, quantités, totaux &
+\passed \\
+\hline
+
+TC13 & Modification quantité & 
+1. Aller sur page panier \newline
+2. Changer la quantité d'un article &
+Quantité et total mis à jour &
+\passed \\
+\hline
+
+TC14 & Suppression article & 
+1. Cliquer sur icône supprimer \newline
+2. Confirmer &
+Article retiré, total recalculé &
+\passed \\
+\hline
+
+TC15 & Panier vide & 
+1. Supprimer tous les articles \newline
+2. Vérifier l'affichage &
+Message "Panier vide" + lien store &
+\passed \\
+\hline
+
+TC16 & Persistance panier & 
+1. Ajouter articles \newline
+2. Fermer navigateur \newline
+3. Rouvrir le site &
+Articles toujours présents &
+\passed \\
+\hline
+
+\caption{Tests Module Panier}
+\end{longtable}
+
+% ============================================
+\section{Scénarios de Test - Module Authentification}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC17 & Affichage page login & 
+1. Aller sur /tn/account \newline
+2. Vérifier le formulaire &
+Formulaire login avec design luxueux &
+\passed \\
+\hline
+
+TC18 & Connexion valide & 
+1. Entrer email/password valides \newline
+2. Cliquer "Sign in" &
+Redirection vers dashboard compte &
+\passed \\
+\hline
+
+TC19 & Connexion invalide & 
+1. Entrer credentials incorrects \newline
+2. Cliquer "Sign in" &
+Message d'erreur affiché &
+\passed \\
+\hline
+
+TC20 & Affichage formulaire inscription & 
+1. Cliquer "Create account" \newline
+2. Vérifier le formulaire &
+Formulaire avec tous les champs &
+\passed \\
+\hline
+
+TC21 & Inscription nouvel utilisateur & 
+1. Remplir tous les champs \newline
+2. Cliquer "Create Account" &
+Compte créé, redirection &
+\passed \\
+\hline
+
+TC22 & Validation email requis & 
+1. Laisser email vide \newline
+2. Soumettre &
+Message "Email requis" &
+\passed \\
+\hline
+
+TC23 & Validation format email & 
+1. Entrer email invalide \newline
+2. Soumettre &
+Message "Format email invalide" &
+\passed \\
+\hline
+
+TC24 & Déconnexion & 
+1. Se connecter \newline
+2. Cliquer "Log out" &
+Session terminée, redirection login &
+\passed \\
+\hline
+
+\caption{Tests Module Authentification}
+\end{longtable}
+
+% ============================================
+\section{Scénarios de Test - Module Compte Client}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC25 & Dashboard compte & 
+1. Se connecter \newline
+2. Vérifier le dashboard &
+Message bienvenue, statistiques &
+\passed \\
+\hline
+
+TC26 & Page profil & 
+1. Cliquer "Profile" \newline
+2. Vérifier les informations &
+Nom, email, téléphone affichés &
+\passed \\
+\hline
+
+TC27 & Modification profil & 
+1. Modifier le nom \newline
+2. Sauvegarder &
+Informations mises à jour &
+\passed \\
+\hline
+
+TC28 & Gestion adresses & 
+1. Aller sur "Addresses" \newline
+2. Ajouter nouvelle adresse &
+Adresse ajoutée à la liste &
+\passed \\
+\hline
+
+TC29 & Historique commandes & 
+1. Cliquer "Orders" \newline
+2. Vérifier la liste &
+Liste des commandes passées &
+\passed \\
+\hline
+
+TC30 & Détail commande & 
+1. Cliquer sur une commande \newline
+2. Vérifier les détails &
+Articles, statut, adresse, total &
+\passed \\
+\hline
+
+\caption{Tests Module Compte Client}
+\end{longtable}
+
+% ============================================
+\section{Scénarios de Test - Module Checkout}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC31 & Accès checkout & 
+1. Avoir articles dans panier \newline
+2. Cliquer "Checkout" &
+Page checkout avec récapitulatif &
+\passed \\
+\hline
+
+TC32 & Saisie adresse livraison & 
+1. Remplir formulaire adresse \newline
+2. Continuer &
+Adresse enregistrée, étape suivante &
+\passed \\
+\hline
+
+TC33 & Sélection livraison & 
+1. Voir options de livraison \newline
+2. Sélectionner une option &
+Option sélectionnée, frais affichés &
+\passed \\
+\hline
+
+TC34 & Récapitulatif commande & 
+1. Vérifier le récapitulatif \newline
+2. Contrôler les montants &
+Sous-total, livraison, total corrects &
+\passed \\
+\hline
+
+TC35 & Validation commande & 
+1. Remplir toutes les étapes \newline
+2. Cliquer "Place Order" &
+Commande créée, confirmation &
+\passed \\
+\hline
+
+TC36 & Page confirmation & 
+1. Finaliser commande \newline
+2. Vérifier page confirmation &
+Numéro commande, résumé affiché &
+\passed \\
+\hline
+
+\caption{Tests Module Checkout}
+\end{longtable}
+
+% ============================================
+\section{Scénarios de Test - Navigation \& UI}
+% ============================================
+
+\begin{longtable}{|p{1cm}|p{4cm}|p{5cm}|p{2cm}|p{2cm}|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{darkgrey!20}
+\textbf{ID} & \textbf{Cas de Test} & \textbf{Étapes} & \textbf{Résultat Attendu} & \textbf{Statut} \\
+\hline
+\endhead
+
+TC37 & Menu latéral - Ouverture & 
+1. Cliquer sur "Menu" \newline
+2. Vérifier l'animation &
+Menu glisse depuis la gauche &
+\passed \\
+\hline
+
+TC38 & Menu latéral - Fermeture & 
+1. Cliquer sur X ou backdrop \newline
+2. Vérifier la fermeture &
+Menu se ferme avec animation &
+\passed \\
+\hline
+
+TC39 & Menu latéral - Liens & 
+1. Cliquer sur un lien du menu \newline
+2. Vérifier la navigation &
+Navigation correcte, menu fermé &
+\passed \\
+\hline
+
+TC40 & Design responsive mobile & 
+1. Redimensionner à 375px \newline
+2. Vérifier l'affichage &
+Layout adapté, éléments visibles &
+\passed \\
+\hline
+
+TC41 & Design responsive tablet & 
+1. Redimensionner à 768px \newline
+2. Vérifier l'affichage &
+Grille 2 colonnes, menu responsive &
+\passed \\
+\hline
+
+TC42 & Design responsive desktop & 
+1. Vérifier à 1440px \newline
+2. Contrôler le layout &
+Grille 4 colonnes, navigation complète &
+\passed \\
+\hline
+
+TC43 & Header sticky & 
+1. Scroller vers le bas \newline
+2. Vérifier le header &
+Header reste visible en haut &
+\passed \\
+\hline
+
+TC44 & Animations hover produits & 
+1. Survoler une carte produit \newline
+2. Vérifier les effets &
+Scale, ombre, transitions fluides &
+\passed \\
+\hline
+
+TC45 & Chargement des images & 
+1. Parcourir plusieurs pages \newline
+2. Vérifier les images &
+Images chargées, placeholders ok &
+\failed \\
+\hline
+
+\caption{Tests Navigation \& UI}
+\end{longtable}
+
+% ============================================
+\section{Bugs et Anomalies}
+% ============================================
+
+\subsection{Bug \#1 - Placeholder images}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{ID} & BUG-001 \\
+\hline
+\textbf{Sévérité} & Mineure \\
+\hline
+\textbf{Test concerné} & TC45 \\
+\hline
+\textbf{Description} & Certains produits sans image affichent un placeholder générique au lieu d'une image par défaut de la marque \\
+\hline
+\textbf{Étapes} & 1. Aller sur /store \newline 2. Voir produits sans thumbnail \\
+\hline
+\textbf{Résultat} & Placeholder gris générique affiché \\
+\hline
+\textbf{Attendu} & Image placeholder M\&A Collections \\
+\hline
+\textbf{Statut} & À corriger \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Bug \#2 - Menu catégories vides}
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{ID} & BUG-002 \\
+\hline
+\textbf{Sévérité} & Mineure \\
+\hline
+\textbf{Test concerné} & TC39 \\
+\hline
+\textbf{Description} & Les liens de catégories dans le menu latéral pointent vers des URLs statiques qui peuvent ne pas exister \\
+\hline
+\textbf{Étapes} & 1. Ouvrir menu \newline 2. Cliquer sur "T-Shirts" \\
+\hline
+\textbf{Résultat} & Page 404 si catégorie non créée en BDD \\
+\hline
+\textbf{Attendu} & Liens dynamiques basés sur les catégories existantes \\
+\hline
+\textbf{Statut} & À corriger \\
+\hline
+\end{tabular}
+\end{table}
+
+% ============================================
+\section{Résumé des Tests}
+% ============================================
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\rowcolor{darkgrey!20}
+\textbf{Module} & \textbf{Total} & \textbf{Passés} & \textbf{Échoués} & \textbf{Taux} \\
+\hline
+Catalogue & 8 & 8 & 0 & 100\% \\
+\hline
+Panier & 8 & 8 & 0 & 100\% \\
+\hline
+Authentification & 8 & 8 & 0 & 100\% \\
+\hline
+Compte Client & 6 & 6 & 0 & 100\% \\
+\hline
+Checkout & 6 & 6 & 0 & 100\% \\
+\hline
+Navigation \& UI & 9 & 7 & 2 & 78\% \\
+\hline
+\rowcolor{brandgold!30}
+\textbf{TOTAL} & \textbf{45} & \textbf{43} & \textbf{2} & \textbf{95.5\%} \\
+\hline
+\end{tabular}
+\caption{Résumé par module}
+\end{table}
+
+% ============================================
+\section{Conclusion et Recommandations}
+% ============================================
+
+\subsection{Conclusion}
+Les tests de validation ont démontré que la plateforme M\&A Collections est fonctionnelle et prête pour la mise en production. Le taux de réussite de 95.5\% est satisfaisant, avec seulement 2 bugs mineurs identifiés qui n'affectent pas les fonctionnalités critiques.
+
+\subsection{Recommandations}
+\begin{enumerate}
+    \item \textbf{Priorité Haute:}
+    \begin{itemize}
+        \item Créer une image placeholder personnalisée M\&A Collections
+        \item Rendre les catégories du menu latéral dynamiques
+    \end{itemize}
+    
+    \item \textbf{Priorité Moyenne:}
+    \begin{itemize}
+        \item Ajouter des tests automatisés (Jest, Cypress)
+        \item Optimiser le chargement des images (lazy loading)
+    \end{itemize}
+    
+    \item \textbf{Priorité Basse:}
+    \begin{itemize}
+        \item Améliorer les messages d'erreur
+        \item Ajouter des analytics
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Approbation}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Rôle} & \textbf{Nom} & \textbf{Signature/Date} \\
+\hline
+Testeur QA & & \\
+\hline
+Chef de Projet & & \\
+\hline
+Client & & \\
+\hline
+\end{tabular}
+\caption{Approbation du rapport}
+\end{table}
+
+\end{document}

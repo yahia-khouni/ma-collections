@@ -1,0 +1,74 @@
+@startuml UseCase_Global
+' M&A Collections - Global Use Case Diagram
+' Generate: https://www.plantuml.com/plantuml
+
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+skinparam backgroundColor #FEFEFE
+skinparam handwritten false
+
+skinparam usecase {
+    BackgroundColor #F9FAFB
+    BorderColor #111827
+    ArrowColor #111827
+}
+
+skinparam actor {
+    BackgroundColor #D4AF37
+    BorderColor #B8960C
+}
+
+title M&A Collections - Diagramme de Cas d'Utilisation Global
+
+actor "Visiteur" as V
+actor "Client" as C
+actor "Administrateur" as A
+
+rectangle "M&A Collections E-commerce" {
+    ' Visiteur use cases
+    usecase "Parcourir le catalogue" as UC1
+    usecase "Rechercher un produit" as UC2
+    usecase "Voir détails produit" as UC3
+    usecase "S'inscrire" as UC4
+    usecase "Se connecter" as UC5
+    
+    ' Client use cases
+    usecase "Ajouter au panier" as UC6
+    usecase "Gérer le panier" as UC7
+    usecase "Passer une commande" as UC8
+    usecase "Consulter historique" as UC9
+    usecase "Gérer son profil" as UC10
+    usecase "Se déconnecter" as UC11
+    
+    ' Admin use cases
+    usecase "Gérer les produits" as UC12
+    usecase "Gérer les commandes" as UC13
+    usecase "Gérer les clients" as UC14
+    usecase "Voir statistiques" as UC15
+}
+
+V --> UC1
+V --> UC2
+V --> UC3
+V --> UC4
+V --> UC5
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC6
+C --> UC7
+C --> UC8
+C --> UC9
+C --> UC10
+C --> UC11
+
+A --> UC12
+A --> UC13
+A --> UC14
+A --> UC15
+
+C --|> V : <<extends>>
+
+@enduml

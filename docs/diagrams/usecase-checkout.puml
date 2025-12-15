@@ -1,0 +1,45 @@
+@startuml UseCase_Checkout
+' M&A Collections - Checkout Module Use Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+skinparam backgroundColor #FEFEFE
+
+skinparam usecase {
+    BackgroundColor #F9FAFB
+    BorderColor #111827
+}
+
+skinparam actor {
+    BackgroundColor #D4AF37
+    BorderColor #B8960C
+}
+
+title Module Commande (Checkout) - Cas d'Utilisation
+
+actor "Client" as C
+actor "Système Paiement" as SP
+actor "Système Email" as SE
+
+rectangle "Module Commande" {
+    usecase "Saisir adresse livraison" as UC1
+    usecase "Choisir mode livraison" as UC2
+    usecase "Choisir mode paiement" as UC3
+    usecase "Valider commande" as UC4
+    usecase "Traiter paiement" as UC5
+    usecase "Confirmer commande" as UC6
+    usecase "Envoyer confirmation" as UC7
+}
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC4
+
+UC4 ..> UC5 : <<include>>
+UC5 --> SP
+UC5 ..> UC6 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC7 --> SE
+
+@enduml

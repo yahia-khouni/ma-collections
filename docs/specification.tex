@@ -1,0 +1,299 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\geometry{margin=2.5cm}
+
+\definecolor{brandgold}{RGB}{212,175,55}
+\definecolor{darkgrey}{RGB}{17,24,39}
+
+\titleformat{\section}{\Large\bfseries\color{darkgrey}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgrey}}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{brandgold}{M\&A Collections}}
+\fancyhead[R]{Cahier de Charge Fonctionnel}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\textcolor{darkgrey}{Cahier de Charge Fonctionnel}\par}
+    \vspace{0.5cm}
+    {\Large\textcolor{brandgold}{M\&A Collections}\par}
+    \vspace{1cm}
+    {\large Plateforme E-commerce de Mode Premium\par}
+    
+    \vspace{2cm}
+    
+    \begin{tabular}{ll}
+        \textbf{Projet:} & M\&A Collections Storefront \\
+        \textbf{Version:} & 1.0 \\
+        \textbf{Date:} & 15 Décembre 2025 \\
+        \textbf{Auteur:} & Équipe de Développement \\
+    \end{tabular}
+    
+    \vfill
+    
+    {\small Technologies: Medusa.js v2 | Next.js 15 | TypeScript | Tailwind CSS\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================
+\section{Introduction}
+% ============================================
+
+\subsection{Contexte du Projet}
+M\&A Collections est une plateforme e-commerce spécialisée dans la vente de vêtements et accessoires de mode premium en Tunisie. Le projet vise à offrir une expérience d'achat en ligne luxueuse et moderne, reflétant l'identité de marque haut de gamme.
+
+\subsection{Objectifs}
+\begin{itemize}
+    \item Créer une boutique en ligne moderne avec une interface utilisateur élégante
+    \item Offrir une expérience d'achat fluide et intuitive
+    \item Permettre la gestion efficace des produits, commandes et clients
+    \item Assurer la sécurité des transactions et des données personnelles
+    \item Supporter le marché tunisien (devise TND, région Tunisie)
+\end{itemize}
+
+\subsection{Périmètre}
+Le projet couvre:
+\begin{itemize}
+    \item Frontend (Storefront): Interface client avec Next.js 15
+    \item Backend: API et administration avec Medusa.js v2
+    \item Base de données: PostgreSQL
+    \item Gestion des paiements et livraisons
+\end{itemize}
+
+% ============================================
+\section{Description Fonctionnelle}
+% ============================================
+
+\subsection{Acteurs du Système}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|p{10cm}|}
+\hline
+\textbf{Acteur} & \textbf{Description} \\
+\hline
+Visiteur & Utilisateur non authentifié qui peut parcourir le catalogue \\
+\hline
+Client & Utilisateur authentifié pouvant effectuer des achats \\
+\hline
+Administrateur & Gestionnaire du back-office (produits, commandes, etc.) \\
+\hline
+Système & Services automatisés (emails, notifications, etc.) \\
+\hline
+\end{tabular}
+\caption{Acteurs du système}
+\end{table}
+
+\subsection{Fonctionnalités Principales}
+
+\subsubsection{Module Catalogue}
+\begin{itemize}
+    \item \textbf{F1.1} - Affichage des produits avec pagination
+    \item \textbf{F1.2} - Filtrage par catégories (Hommes, Femmes, T-Shirts, Chemises)
+    \item \textbf{F1.3} - Tri des produits (prix, date, popularité)
+    \item \textbf{F1.4} - Recherche de produits
+    \item \textbf{F1.5} - Affichage détaillé d'un produit (images, variantes, prix)
+    \item \textbf{F1.6} - Gestion des variantes (taille, couleur)
+\end{itemize}
+
+\subsubsection{Module Panier}
+\begin{itemize}
+    \item \textbf{F2.1} - Ajout de produits au panier
+    \item \textbf{F2.2} - Modification des quantités
+    \item \textbf{F2.3} - Suppression d'articles
+    \item \textbf{F2.4} - Calcul automatique du total
+    \item \textbf{F2.5} - Application de codes promotionnels
+    \item \textbf{F2.6} - Persistance du panier (cookies/session)
+\end{itemize}
+
+\subsubsection{Module Authentification}
+\begin{itemize}
+    \item \textbf{F3.1} - Inscription avec email et mot de passe
+    \item \textbf{F3.2} - Connexion sécurisée
+    \item \textbf{F3.3} - Déconnexion
+    \item \textbf{F3.4} - Réinitialisation du mot de passe
+    \item \textbf{F3.5} - Gestion du profil utilisateur
+\end{itemize}
+
+\subsubsection{Module Compte Client}
+\begin{itemize}
+    \item \textbf{F4.1} - Tableau de bord personnel
+    \item \textbf{F4.2} - Historique des commandes
+    \item \textbf{F4.3} - Gestion des adresses de livraison
+    \item \textbf{F4.4} - Modification des informations personnelles
+    \item \textbf{F4.5} - Suivi des commandes en cours
+\end{itemize}
+
+\subsubsection{Module Commande (Checkout)}
+\begin{itemize}
+    \item \textbf{F5.1} - Saisie des informations de livraison
+    \item \textbf{F5.2} - Sélection du mode de livraison
+    \item \textbf{F5.3} - Choix du mode de paiement
+    \item \textbf{F5.4} - Récapitulatif de commande
+    \item \textbf{F5.5} - Confirmation et validation
+    \item \textbf{F5.6} - Email de confirmation
+\end{itemize}
+
+\subsubsection{Module Navigation}
+\begin{itemize}
+    \item \textbf{F6.1} - Menu latéral responsive avec animations
+    \item \textbf{F6.2} - Navigation par catégories
+    \item \textbf{F6.3} - Accès rapide au panier (dropdown)
+    \item \textbf{F6.4} - Sélection de la région/pays
+    \item \textbf{F6.5} - Pied de page avec liens utiles
+\end{itemize}
+
+% ============================================
+\section{Exigences Non Fonctionnelles}
+% ============================================
+
+\subsection{Performance}
+\begin{itemize}
+    \item Temps de chargement initial < 3 secondes
+    \item Temps de réponse API < 500ms
+    \item Support de 100+ utilisateurs simultanés
+\end{itemize}
+
+\subsection{Sécurité}
+\begin{itemize}
+    \item Authentification sécurisée (JWT)
+    \item Protection CSRF et XSS
+    \item Chiffrement des données sensibles
+    \item HTTPS obligatoire
+\end{itemize}
+
+\subsection{Compatibilité}
+\begin{itemize}
+    \item Navigateurs: Chrome, Firefox, Safari, Edge (versions récentes)
+    \item Responsive: Mobile, Tablette, Desktop
+    \item Résolutions: 320px à 1920px+
+\end{itemize}
+
+\subsection{Design UI/UX}
+\begin{itemize}
+    \item Identité visuelle luxueuse (noir, or, blanc)
+    \item Typographie élégante (Playfair Display, Inter)
+    \item Animations fluides et transitions
+    \item Accessibilité WCAG 2.1 niveau AA
+\end{itemize}
+
+% ============================================
+\section{Architecture Technique}
+% ============================================
+
+\subsection{Stack Technologique}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Composant} & \textbf{Technologie} & \textbf{Version} \\
+\hline
+Frontend & Next.js (React) & 15.3.8 \\
+Backend & Medusa.js & 2.12.2 \\
+Langage & TypeScript & 5.x \\
+Styles & Tailwind CSS & 3.x \\
+Base de données & PostgreSQL & 15.x \\
+Cache & Redis & 7.x \\
+Runtime & Node.js & 20.x \\
+\hline
+\end{tabular}
+\caption{Technologies utilisées}
+\end{table}
+
+\subsection{Architecture Globale}
+\begin{verbatim}
+┌─────────────────┐     ┌─────────────────┐     ┌──────────────┐
+│   Navigateur    │────▶│  Next.js App    │────▶│  Medusa API  │
+│   (Client)      │     │  (Port 8000)    │     │  (Port 9000) │
+└─────────────────┘     └─────────────────┘     └──────┬───────┘
+                                                       │
+                                                       ▼
+                                               ┌──────────────┐
+                                               │  PostgreSQL  │
+                                               │   Database   │
+                                               └──────────────┘
+\end{verbatim}
+
+% ============================================
+\section{Charte Graphique}
+% ============================================
+
+\subsection{Palette de Couleurs}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Couleur} & \textbf{Code Hex} & \textbf{Usage} \\
+\hline
+Brand Gold & \#D4AF37 & Accents, boutons principaux \\
+Gold Light & \#E5C158 & Hover states \\
+Gold Dark & \#B8960C & Bordures, ombres \\
+Grey 90 & \#111827 & Texte principal, backgrounds \\
+Grey 50 & \#6B7280 & Texte secondaire \\
+White & \#FFFFFF & Backgrounds, texte sur dark \\
+\hline
+\end{tabular}
+\caption{Palette de couleurs}
+\end{table}
+
+\subsection{Typographie}
+\begin{itemize}
+    \item \textbf{Titres:} Playfair Display (serif, élégant)
+    \item \textbf{Corps:} Inter (sans-serif, lisible)
+\end{itemize}
+
+% ============================================
+\section{Livrables}
+% ============================================
+
+\begin{enumerate}
+    \item Code source complet (Frontend + Backend)
+    \item Documentation technique
+    \item Manuel d'utilisation
+    \item Scripts de déploiement
+    \item Jeu de données de test (seed)
+\end{enumerate}
+
+% ============================================
+\section{Planning Prévisionnel}
+% ============================================
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Phase} & \textbf{Durée} & \textbf{Livrables} \\
+\hline
+Analyse \& Conception & 1 semaine & Spécifications, UML \\
+Développement Backend & 2 semaines & API Medusa configurée \\
+Développement Frontend & 3 semaines & Interface utilisateur \\
+Tests \& Intégration & 1 semaine & Rapport de tests \\
+Déploiement & 3 jours & Application en production \\
+\hline
+\end{tabular}
+\caption{Planning du projet}
+\end{table}
+
+\end{document}

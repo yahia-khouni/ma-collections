@@ -1,0 +1,148 @@
+@startuml Class_Main
+' M&A Collections - Main Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #FEFEFE
+skinparam classFontStyle bold
+
+skinparam class {
+    BackgroundColor #F9FAFB
+    BorderColor #111827
+    ArrowColor #111827
+}
+
+title M&A Collections - Diagramme de Classes Principal
+
+class Customer {
+    - id: string
+    - email: string
+    - first_name: string
+    - last_name: string
+    - phone: string
+    - password_hash: string
+    - created_at: datetime
+    - updated_at: datetime
+    --
+    + register(): void
+    + login(): boolean
+    + logout(): void
+    + updateProfile(): void
+}
+
+class Address {
+    - id: string
+    - first_name: string
+    - last_name: string
+    - address_1: string
+    - address_2: string
+    - city: string
+    - postal_code: string
+    - country_code: string
+    - phone: string
+}
+
+class Product {
+    - id: string
+    - title: string
+    - subtitle: string
+    - description: string
+    - handle: string
+    - thumbnail: string
+    - status: ProductStatus
+    - created_at: datetime
+    --
+    + getPrice(region): Money
+    + isAvailable(): boolean
+}
+
+class ProductVariant {
+    - id: string
+    - title: string
+    - sku: string
+    - inventory_quantity: int
+    - prices: Price[]
+    --
+    + isInStock(): boolean
+}
+
+class ProductCategory {
+    - id: string
+    - name: string
+    - handle: string
+    - description: string
+    - parent_category_id: string
+}
+
+class Cart {
+    - id: string
+    - email: string
+    - region_id: string
+    - items: LineItem[]
+    - subtotal: int
+    - total: int
+    --
+    + addItem(variant, quantity): void
+    + removeItem(itemId): void
+    + updateQuantity(itemId, qty): void
+    + getTotal(): Money
+}
+
+class LineItem {
+    - id: string
+    - cart_id: string
+    - variant_id: string
+    - quantity: int
+    - unit_price: int
+    - total: int
+}
+
+class Order {
+    - id: string
+    - display_id: int
+    - customer_id: string
+    - status: OrderStatus
+    - fulfillment_status: string
+    - payment_status: string
+    - items: LineItem[]
+    - shipping_address: Address
+    - total: int
+    - created_at: datetime
+}
+
+class Region {
+    - id: string
+    - name: string
+    - currency_code: string
+    - countries: Country[]
+}
+
+enum ProductStatus {
+    DRAFT
+    PUBLISHED
+    REJECTED
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
+    ARCHIVED
+}
+
+Customer "1" -- "*" Address : has >
+Customer "1" -- "*" Order : places >
+Customer "1" -- "0..1" Cart : has >
+
+Product "1" -- "*" ProductVariant : contains >
+Product "*" -- "*" ProductCategory : belongs to >
+
+Cart "1" -- "*" LineItem : contains >
+LineItem "*" -- "1" ProductVariant : references >
+
+Order "1" -- "*" LineItem : contains >
+Order "1" -- "1" Address : ships to >
+Order "*" -- "1" Region : belongs to >
+
+Cart "*" -- "1" Region : belongs to >
+
+@enduml

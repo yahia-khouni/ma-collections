@@ -1,0 +1,673 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+\geometry{margin=2.5cm}
+
+\definecolor{brandgold}{RGB}{212,175,55}
+\definecolor{darkgrey}{RGB}{17,24,39}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+
+\lstset{
+    backgroundcolor=\color{gray!10},
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    language=Java,
+    showstringspaces=false,
+    keywordstyle=\color{blue},
+    commentstyle=\color{codegreen},
+}
+
+\titleformat{\section}{\Large\bfseries\color{darkgrey}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{darkgrey}}{\thesubsection}{1em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textcolor{brandgold}{M\&A Collections}}
+\fancyhead[R]{Conception UML}
+\fancyfoot[C]{\thepage}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries\textcolor{darkgrey}{Document de Conception}\par}
+    \vspace{0.5cm}
+    {\Large\textcolor{brandgold}{M\&A Collections}\par}
+    \vspace{1cm}
+    {\large Diagrammes UML - PlantUML\par}
+    
+    \vspace{2cm}
+    
+    \begin{tabular}{ll}
+        \textbf{Projet:} & M\&A Collections E-commerce \\
+        \textbf{Version:} & 1.0 \\
+        \textbf{Date:} & 15 Décembre 2025 \\
+    \end{tabular}
+    
+    \vfill
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ============================================
+\section{Diagrammes de Cas d'Utilisation}
+% ============================================
+
+\subsection{Cas d'Utilisation Général}
+
+\begin{lstlisting}[caption={Use Case - Système Global}]
+@startuml UseCase_Global
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Visiteur" as V
+actor "Client" as C
+actor "Administrateur" as A
+
+rectangle "M&A Collections E-commerce" {
+    ' Visiteur use cases
+    usecase "Parcourir le catalogue" as UC1
+    usecase "Rechercher un produit" as UC2
+    usecase "Voir details produit" as UC3
+    usecase "S'inscrire" as UC4
+    usecase "Se connecter" as UC5
+    
+    ' Client use cases
+    usecase "Ajouter au panier" as UC6
+    usecase "Gerer le panier" as UC7
+    usecase "Passer une commande" as UC8
+    usecase "Consulter historique" as UC9
+    usecase "Gerer son profil" as UC10
+    usecase "Se deconnecter" as UC11
+    
+    ' Admin use cases
+    usecase "Gerer les produits" as UC12
+    usecase "Gerer les commandes" as UC13
+    usecase "Gerer les clients" as UC14
+    usecase "Voir statistiques" as UC15
+}
+
+V --> UC1
+V --> UC2
+V --> UC3
+V --> UC4
+V --> UC5
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC6
+C --> UC7
+C --> UC8
+C --> UC9
+C --> UC10
+C --> UC11
+
+A --> UC12
+A --> UC13
+A --> UC14
+A --> UC15
+
+C --|> V : extends
+
+@enduml
+\end{lstlisting}
+
+\subsection{Cas d'Utilisation - Module Panier}
+
+\begin{lstlisting}[caption={Use Case - Gestion du Panier}]
+@startuml UseCase_Cart
+left to right direction
+skinparam actorStyle awesome
+
+actor "Client" as C
+
+rectangle "Module Panier" {
+    usecase "Ajouter produit au panier" as UC1
+    usecase "Modifier quantite" as UC2
+    usecase "Supprimer article" as UC3
+    usecase "Voir panier" as UC4
+    usecase "Appliquer code promo" as UC5
+    usecase "Calculer total" as UC6
+    usecase "Vider le panier" as UC7
+    usecase "Proceder au checkout" as UC8
+}
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC4
+C --> UC5
+C --> UC7
+C --> UC8
+
+UC1 ..> UC6 : <<include>>
+UC2 ..> UC6 : <<include>>
+UC3 ..> UC6 : <<include>>
+UC5 ..> UC6 : <<include>>
+UC4 ..> UC6 : <<include>>
+
+@enduml
+\end{lstlisting}
+
+\subsection{Cas d'Utilisation - Module Commande}
+
+\begin{lstlisting}[caption={Use Case - Processus de Commande}]
+@startuml UseCase_Checkout
+left to right direction
+skinparam actorStyle awesome
+
+actor "Client" as C
+actor "Systeme Paiement" as SP
+actor "Systeme Email" as SE
+
+rectangle "Module Commande (Checkout)" {
+    usecase "Saisir adresse livraison" as UC1
+    usecase "Choisir mode livraison" as UC2
+    usecase "Choisir mode paiement" as UC3
+    usecase "Valider commande" as UC4
+    usecase "Traiter paiement" as UC5
+    usecase "Confirmer commande" as UC6
+    usecase "Envoyer confirmation" as UC7
+}
+
+C --> UC1
+C --> UC2
+C --> UC3
+C --> UC4
+
+UC4 ..> UC5 : <<include>>
+UC5 --> SP
+UC5 ..> UC6 : <<include>>
+UC6 ..> UC7 : <<include>>
+UC7 --> SE
+
+@enduml
+\end{lstlisting}
+
+\subsection{Cas d'Utilisation - Module Authentification}
+
+\begin{lstlisting}[caption={Use Case - Authentification}]
+@startuml UseCase_Auth
+left to right direction
+skinparam actorStyle awesome
+
+actor "Visiteur" as V
+actor "Client" as C
+
+rectangle "Module Authentification" {
+    usecase "S'inscrire" as UC1
+    usecase "Se connecter" as UC2
+    usecase "Se deconnecter" as UC3
+    usecase "Reinitialiser mot de passe" as UC4
+    usecase "Modifier mot de passe" as UC5
+    usecase "Valider email" as UC6
+}
+
+V --> UC1
+V --> UC2
+V --> UC4
+
+C --> UC3
+C --> UC5
+
+UC1 ..> UC6 : <<include>>
+UC4 ..> UC6 : <<include>>
+
+@enduml
+\end{lstlisting}
+
+\newpage
+% ============================================
+\section{Diagrammes de Classes}
+% ============================================
+
+\subsection{Diagramme de Classes Principal}
+
+\begin{lstlisting}[caption={Class Diagram - Entites Principales}]
+@startuml Class_Main
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+
+class Customer {
+    - id: string
+    - email: string
+    - first_name: string
+    - last_name: string
+    - phone: string
+    - password_hash: string
+    - created_at: datetime
+    - updated_at: datetime
+    + register(): void
+    + login(): boolean
+    + logout(): void
+    + updateProfile(): void
+}
+
+class Address {
+    - id: string
+    - first_name: string
+    - last_name: string
+    - address_1: string
+    - address_2: string
+    - city: string
+    - postal_code: string
+    - country_code: string
+    - phone: string
+}
+
+class Product {
+    - id: string
+    - title: string
+    - subtitle: string
+    - description: string
+    - handle: string
+    - thumbnail: string
+    - status: ProductStatus
+    - created_at: datetime
+    + getPrice(region): Money
+    + isAvailable(): boolean
+}
+
+class ProductVariant {
+    - id: string
+    - title: string
+    - sku: string
+    - inventory_quantity: int
+    - prices: Price[]
+    + isInStock(): boolean
+}
+
+class ProductCategory {
+    - id: string
+    - name: string
+    - handle: string
+    - description: string
+    - parent_category_id: string
+}
+
+class Cart {
+    - id: string
+    - email: string
+    - region_id: string
+    - items: LineItem[]
+    - subtotal: int
+    - total: int
+    + addItem(variant, quantity): void
+    + removeItem(itemId): void
+    + updateQuantity(itemId, qty): void
+    + getTotal(): Money
+}
+
+class LineItem {
+    - id: string
+    - cart_id: string
+    - variant_id: string
+    - quantity: int
+    - unit_price: int
+    - total: int
+}
+
+class Order {
+    - id: string
+    - display_id: int
+    - customer_id: string
+    - status: OrderStatus
+    - fulfillment_status: string
+    - payment_status: string
+    - items: LineItem[]
+    - shipping_address: Address
+    - total: int
+    - created_at: datetime
+}
+
+class Region {
+    - id: string
+    - name: string
+    - currency_code: string
+    - countries: Country[]
+}
+
+enum ProductStatus {
+    DRAFT
+    PUBLISHED
+    REJECTED
+}
+
+enum OrderStatus {
+    PENDING
+    COMPLETED
+    CANCELLED
+    ARCHIVED
+}
+
+Customer "1" -- "*" Address : has
+Customer "1" -- "*" Order : places
+Customer "1" -- "0..1" Cart : has
+
+Product "1" -- "*" ProductVariant : contains
+Product "*" -- "*" ProductCategory : belongs to
+
+Cart "1" -- "*" LineItem : contains
+LineItem "*" -- "1" ProductVariant : references
+
+Order "1" -- "*" LineItem : contains
+Order "1" -- "1" Address : ships to
+Order "*" -- "1" Region : belongs to
+
+Cart "*" -- "1" Region : belongs to
+
+@enduml
+\end{lstlisting}
+
+\subsection{Diagramme de Classes - Module Panier}
+
+\begin{lstlisting}[caption={Class Diagram - Module Panier}]
+@startuml Class_Cart
+skinparam classAttributeIconSize 0
+
+class CartService {
+    + createCart(regionId): Cart
+    + getCart(cartId): Cart
+    + addLineItem(cartId, variantId, qty): Cart
+    + updateLineItem(cartId, itemId, qty): Cart
+    + removeLineItem(cartId, itemId): Cart
+    + applyDiscount(cartId, code): Cart
+    + calculateTotals(cart): Cart
+}
+
+class Cart {
+    - id: string
+    - region_id: string
+    - customer_id: string
+    - email: string
+    - billing_address_id: string
+    - shipping_address_id: string
+    - items: LineItem[]
+    - discounts: Discount[]
+    - subtotal: int
+    - discount_total: int
+    - shipping_total: int
+    - tax_total: int
+    - total: int
+}
+
+class LineItem {
+    - id: string
+    - cart_id: string
+    - order_id: string
+    - variant_id: string
+    - title: string
+    - description: string
+    - thumbnail: string
+    - quantity: int
+    - unit_price: int
+    - subtotal: int
+    - total: int
+}
+
+class Discount {
+    - id: string
+    - code: string
+    - is_dynamic: boolean
+    - rule: DiscountRule
+    - starts_at: datetime
+    - ends_at: datetime
+}
+
+class DiscountRule {
+    - id: string
+    - type: DiscountType
+    - value: int
+    - allocation: string
+}
+
+enum DiscountType {
+    FIXED
+    PERCENTAGE
+    FREE_SHIPPING
+}
+
+CartService --> Cart : manages
+Cart "1" *-- "*" LineItem : contains
+Cart "*" -- "*" Discount : applies
+
+@enduml
+\end{lstlisting}
+
+\subsection{Diagramme de Classes - Frontend Components}
+
+\begin{lstlisting}[caption={Class Diagram - React Components}]
+@startuml Class_Components
+skinparam classAttributeIconSize 0
+
+package "Layout Components" {
+    class Nav {
+        + regions: Region[]
+        + render(): JSX
+    }
+    
+    class SideMenu {
+        - isOpen: boolean
+        - regions: Region[]
+        + open(): void
+        + close(): void
+        + render(): JSX
+    }
+    
+    class CartDropdown {
+        - cart: Cart
+        - isOpen: boolean
+        + render(): JSX
+    }
+    
+    class Footer {
+        + collections: Collection[]
+        + categories: Category[]
+        + render(): JSX
+    }
+}
+
+package "Product Components" {
+    class ProductCard {
+        - product: Product
+        - region: Region
+        + render(): JSX
+    }
+    
+    class ProductGrid {
+        - products: Product[]
+        + render(): JSX
+    }
+    
+    class ProductActions {
+        - product: Product
+        - variant: Variant
+        + addToCart(): void
+        + render(): JSX
+    }
+}
+
+package "Account Components" {
+    class Login {
+        - email: string
+        - password: string
+        + handleSubmit(): void
+        + render(): JSX
+    }
+    
+    class Register {
+        - formData: CustomerData
+        + handleSubmit(): void
+        + render(): JSX
+    }
+    
+    class AccountNav {
+        - customer: Customer
+        + handleLogout(): void
+        + render(): JSX
+    }
+}
+
+package "Checkout Components" {
+    class CheckoutForm {
+        - cart: Cart
+        - step: CheckoutStep
+        + render(): JSX
+    }
+    
+    class Addresses {
+        - addresses: Address[]
+        + selectAddress(): void
+        + render(): JSX
+    }
+    
+    class Payment {
+        - paymentMethods: PaymentMethod[]
+        + processPayment(): void
+        + render(): JSX
+    }
+}
+
+Nav *-- SideMenu
+Nav *-- CartDropdown
+ProductGrid *-- ProductCard
+
+@enduml
+\end{lstlisting}
+
+\newpage
+% ============================================
+\section{Diagramme de Séquence}
+% ============================================
+
+\subsection{Séquence - Ajout au Panier}
+
+\begin{lstlisting}[caption={Sequence Diagram - Add to Cart}]
+@startuml Sequence_AddToCart
+skinparam sequenceMessageAlign center
+
+actor Client
+participant "ProductPage" as PP
+participant "CartService" as CS
+participant "MedusaAPI" as API
+participant "Database" as DB
+
+Client -> PP: Click "Add to Cart"
+activate PP
+
+PP -> CS: addToCart(variantId, quantity)
+activate CS
+
+CS -> API: POST /store/carts/{id}/line-items
+activate API
+
+API -> DB: Check variant stock
+activate DB
+DB --> API: Stock available
+deactivate DB
+
+API -> DB: Insert line item
+activate DB
+DB --> API: Item created
+deactivate DB
+
+API -> DB: Calculate totals
+activate DB
+DB --> API: Updated cart
+deactivate DB
+
+API --> CS: Cart with new item
+deactivate API
+
+CS --> PP: Updated cart state
+deactivate CS
+
+PP -> PP: Show success notification
+PP -> PP: Update cart badge count
+
+PP --> Client: Display updated UI
+deactivate PP
+
+@enduml
+\end{lstlisting}
+
+\subsection{Séquence - Processus de Commande}
+
+\begin{lstlisting}[caption={Sequence Diagram - Checkout Process}]
+@startuml Sequence_Checkout
+skinparam sequenceMessageAlign center
+
+actor Client
+participant "CheckoutPage" as CP
+participant "MedusaAPI" as API
+participant "PaymentGateway" as PG
+participant "EmailService" as ES
+
+Client -> CP: Enter shipping address
+CP -> API: PUT /store/carts/{id}
+API --> CP: Cart updated
+
+Client -> CP: Select shipping method
+CP -> API: POST /store/carts/{id}/shipping-methods
+API --> CP: Shipping added
+
+Client -> CP: Enter payment info
+CP -> API: POST /store/carts/{id}/payment-sessions
+API --> CP: Payment session created
+
+Client -> CP: Click "Place Order"
+activate CP
+
+CP -> API: POST /store/carts/{id}/complete
+activate API
+
+API -> PG: Process payment
+activate PG
+PG --> API: Payment successful
+deactivate PG
+
+API -> API: Create Order
+API -> ES: Send confirmation email
+activate ES
+ES --> API: Email sent
+deactivate ES
+
+API --> CP: Order completed
+deactivate API
+
+CP --> Client: Show order confirmation
+deactivate CP
+
+@enduml
+\end{lstlisting}
+
+% ============================================
+\section{Instructions de Génération}
+% ============================================
+
+Pour générer les diagrammes à partir du code PlantUML:
+
+\begin{enumerate}
+    \item Installer PlantUML: \texttt{npm install -g node-plantuml}
+    \item Ou utiliser le serveur en ligne: \url{https://www.plantuml.com/plantuml}
+    \item Copier le code entre \texttt{@startuml} et \texttt{@enduml}
+    \item Générer l'image (PNG, SVG, ou PDF)
+\end{enumerate}
+
+\end{document}
